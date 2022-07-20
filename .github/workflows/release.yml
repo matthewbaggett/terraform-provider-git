@@ -6,8 +6,6 @@ on:
       - 'v*'
   workflow_dispatch:
 
-env:
-  - ACTIONS_ALLOW_UNSECURE_COMMANDS=true
 jobs:
   goreleaser:
     runs-on: ubuntu-latest

@@ -32,6 +32,7 @@ func TestDataSourceRepository(t *testing.T) {
 
 	expectedBranch := execGit(t, "rev-parse", "--abbrev-ref", "HEAD")
 	expectedCommit := execGit(t, "rev-parse", "HEAD")
+	expectedMessage := execGit(t, "show", "-s", "--format='%s'")
 
 	resource.UnitTest(t, resource.TestCase{
 		ProviderFactories: map[string]func() (*schema.Provider, error){
@@ -45,6 +46,7 @@ func TestDataSourceRepository(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.git_repository.test", "branch", strings.TrimSpace(string(expectedBranch))),
 					resource.TestCheckResourceAttr("data.git_repository.test", "commit_hash", strings.TrimSpace(string(expectedCommit))),
+					resource.TestCheckResourceAttr("data.git_repository.test", "commit_message", strings.TrimSpace(string(expectedMessage))),
 				),
 			},
 		},

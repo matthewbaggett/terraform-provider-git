@@ -27,6 +27,11 @@ func dataSourceRepository() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+
+			"commit_message": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 		},
 	}
 }
@@ -50,6 +55,10 @@ func dataSourceRepositoryRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("commit_hash", head.Hash().String())
 	d.Set("branch", "")
+
+	cIter, err := repo.Log(&git.LogOptions{From: head.Hash()})
+	commit, err := cIter.Next()
+	d.Set("commit_message", commit.Message)
 
 	refName := head.Name()
 
